@@ -1,0 +1,61 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+// Az átalakító függvény: XOR helyett itt összeadást (eltolást) használunk
+vector<char> caesarCipher(const vector<char>& data, int shift) {
+    vector<char> result(data.size());
+    
+    for (size_t i = 0; i < data.size(); i++) {
+        // Minden bájthoz hozzáadjuk az eltolás mértékét
+        result[i] = data[i] + shift;
+    }
+    
+    return result;
+}
+
+int main() {
+    string inputFile, outputFile;
+    int shift; // Itt jelszó helyett egy számot kérünk
+
+    cout << "--- Caesar Fajltitkosito Program ---" << endl;
+    
+    cout << "Add meg a bemeneti fajl nevet (pl. titkos.txt): ";
+    cin >> inputFile;
+
+    cout << "Add meg a kimeneti fajl nevet (pl. eredmeny.bin): ";
+    cin >> outputFile;
+
+    cout << "Add meg az eltolas merteket (pl. 3 a titkositashoz, -3 a feloldashoz): ";
+    cin >> shift;
+
+    // Fájl beolvasása (ugyanúgy, mint a te kódodban)
+    ifstream input(inputFile, ios::binary);
+    if (!input) {
+        cerr << "Hiba: Nem sikerult megnyitni a bemeneti fajlt!" << endl;
+        return 1; 
+    }
+
+    vector<char> data((istreambuf_iterator<char>(input)), istreambuf_iterator<char>());
+    input.close();
+
+    // Adatok átalakítása a Caesar függvénnyel
+    vector<char> processedData = caesarCipher(data, shift);
+
+    // Eredmény kiírása új fájlba
+    ofstream output(outputFile, ios::binary);
+    if (!output) {
+        cerr << "Hiba: Nem sikerult letrehozni a kimeneti fajlt!" << endl;
+        return 1;
+    }
+
+    output.write(processedData.data(), processedData.size());
+    output.close();
+
+    cout << "A muvelet sikeresen befejezodott! Kimenet: " << outputFile << endl;
+
+    return 0;
+}
