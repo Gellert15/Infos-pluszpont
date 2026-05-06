@@ -1,0 +1,58 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+// Represents a pair of integers for custom mathematical processing.
+struct DataPair {
+  int value_a;
+  int value_b;
+};
+
+// UI Helper functions for consistent console output.
+void PrintHeader() { std::cout << "===" << std::endl; }
+void PrintSeparator() { std::cout << "---" << std::endl; }
+void PrintOutputLabel() { std::cout << "Output:" << std::endl; }
+
+// Sorts the vector in ascending order based on the 'value_a' member.
+void SortByValueA(std::vector<DataPair>& data) {
+  std::sort(data.begin(), data.end(), [](const DataPair& lhs, const DataPair& rhs) {
+    return lhs.value_a < rhs.value_a;
+  });
+}
+
+// Processes each pair using parity-based logic and prints the result.
+void ProcessAndPrintData(const std::vector<DataPair>& data) {
+  for (const auto& item : data) {
+    int result = 0;
+    const int a = item.value_a;
+    const int b = item.value_b;
+
+    if (a % 2 == 0) {
+      // If 'a' is even, multiply if 'b' is also even, otherwise add them.
+      result = (b % 2 == 0) ? (a * b) : (a + b);
+    } else {
+      // If 'a' is odd, subtract 'b' if 'b' is even, otherwise return 'a'.
+      result = (b % 2 == 0) ? (a - b) : a;
+    }
+    std::cout << result << std::endl;
+  }
+}
+
+// Orchestrates the sorting and printing process.
+void RunDataPipeline(std::vector<DataPair>& data) {
+  SortByValueA(data);
+  PrintHeader();
+  PrintOutputLabel();
+  PrintSeparator();
+  ProcessAndPrintData(data);
+}
+
+int main() {
+  std::vector<DataPair> data = {
+    {5, 1}, {2, 4}, {3, 7}, {1, 6}, {4, 5}
+  };
+
+  RunDataPipeline(data);
+
+  return 0;
+}
